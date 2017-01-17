@@ -1,0 +1,23 @@
+---
+- hosts: ansi_slave
+  sudo: yes
+
+  tasks:
+   - name: Creating the folder
+     file: path=/var/www/testing123 state=directory mode=0755
+
+   - name: Pushing the index file
+     template: src=files/testing123.html dest=/var/www/testing123/index.html
+
+   - name: Pushing the configuration files
+     template: src=files/testing123.conf dest=/etc/httpd/conf.d/testing123.conf
+
+   - name: Pushing the htaccess files for user authentication
+     template: src=files/.htpasswd dest=/etc/httpd/.htpasswd  mode=0755
+  
+   - name: Pushing the authentication files
+     template: src=files/.htaccess dest=/var/www/testing123 mode=0755
+
+   - name: Restarting the httpd services
+     service: name=httpd state=restarted
+
